@@ -36,14 +36,15 @@ public class ClienteController {
 		return ResponseEntity.ok(clienteRepository.findAll());
 	}
 
-	@GetMapping("/{id}")
-	public ResponseEntity<ClienteModel> GetById(@PathVariable long id) {
-		return clienteRepository.findById(id).map(resp -> ResponseEntity.ok(resp))
+	@GetMapping("/id/{id}")
+	private ResponseEntity<ClienteModel> getById(@PathVariable long id) {
+		return clienteRepository.findById(id)
+				.map(resp -> ResponseEntity.ok(resp))
 				.orElse(ResponseEntity.notFound().build());
 	}
 	
-	@GetMapping("/{nome}")
-	public ResponseEntity<ClienteModel> GetByNome(@PathVariable String nome) {
+	@GetMapping("/nome/{nome}")
+	public ResponseEntity<ClienteModel> getByNome(@PathVariable String nome) {
 		return clienteRepository.findByNome(nome).map(resp -> ResponseEntity.ok(resp))
 				.orElse(ResponseEntity.notFound().build());
 	}

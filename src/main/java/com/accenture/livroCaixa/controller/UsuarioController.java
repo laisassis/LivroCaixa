@@ -37,24 +37,18 @@ public class UsuarioController {
 		return ResponseEntity.ok(usuarioRepository.findAll());
 	}
 
-	@GetMapping("/{id}")
+	@GetMapping("/id/{id}")
 	public ResponseEntity<UsuarioModel> GetById(@PathVariable long id) {
 		return usuarioRepository.findById(id).map(resp -> ResponseEntity.ok(resp))
 				.orElse(ResponseEntity.notFound().build());
 	}
 	
-	@GetMapping("/{nome}")
+	@GetMapping("/nome/{nome}")
 	public ResponseEntity<UsuarioModel> GetByNome(@PathVariable String nome) {
 		return usuarioRepository.findByNome(nome).map(resp -> ResponseEntity.ok(resp))
 				.orElse(ResponseEntity.notFound().build());
 	}
 	
-	@GetMapping("/{login}")
-	public ResponseEntity<UsuarioModel> GetByLogin(@PathVariable String login) {
-		return usuarioRepository.findByLogin(login).map(resp -> ResponseEntity.ok(resp))
-				.orElse(ResponseEntity.notFound().build());
-	}
-
 	@PostMapping("/cadastrar")
 	public ResponseEntity<UsuarioModel> postUsuario(@RequestBody UsuarioModel usuario) {
 		UsuarioModel novoUsuario = usuarioService.cadastrarUsuario(usuario);

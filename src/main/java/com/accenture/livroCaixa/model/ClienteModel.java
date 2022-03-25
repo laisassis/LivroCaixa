@@ -1,23 +1,20 @@
 package com.accenture.livroCaixa.model;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.util.Date;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 
 @Entity
 @Table(name = "tb_clientes")
@@ -27,9 +24,8 @@ public class ClienteModel {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private long id;
 	
-	@Column(name = "dt_cadastro")
-	@JsonFormat(pattern="yyyy-MM-dd")
-	private LocalDate dataCadastro;
+	@Temporal(TemporalType.TIMESTAMP )
+	private Date dataCadastro =  new java.sql.Date(System.currentTimeMillis());
 	
 	@NotNull(message = "O Nome é obrigatório")
 	private String nome;
@@ -65,11 +61,12 @@ public class ClienteModel {
 		this.id = id;
 	}
 
-	public LocalDate getDataCadastro() {
+
+	public Date getDataCadastro() {
 		return dataCadastro;
 	}
 
-	public void setDataCadastro(LocalDate dataCadastro) {
+	public void setDataCadastro(Date dataCadastro) {
 		this.dataCadastro = dataCadastro;
 	}
 
@@ -137,10 +134,6 @@ public class ClienteModel {
 		this.email = email;
 	}
 	
-	//Conexão com Livro Caixa
-	@OneToMany(mappedBy = "cliente", cascade = CascadeType.REMOVE)
-	@JsonIgnoreProperties({"cliente"})
-	private List<LivroCaixa> livroCaixa;
 	
 	
 

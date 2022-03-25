@@ -1,7 +1,6 @@
 package com.accenture.livroCaixa.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,10 +15,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.accenture.livroCaixa.model.LivroCaixa;
+import com.accenture.livroCaixa.model.LivroCaixaModel;
 import com.accenture.livroCaixa.repository.LivroCaixaRepository;
-import com.accenture.livroCaixa.service.LivroCaixaService;
-
 
 @RestController
 @RequestMapping("/livrocaixa")
@@ -29,47 +26,32 @@ public class LivroCaixaController {
 	@Autowired
 	private LivroCaixaRepository livroCaixaRepository;
 	
-	@Autowired
-	private LivroCaixaService livroCaixaService;
+	@GetMapping("/{id}")
+	private ResponseEntity<LivroCaixaModel> getById(@PathVariable long id) {
+		return livroCaixaRepository.findById(id)
+				.map(resp -> ResponseEntity.ok(resp))
+				.orElse(ResponseEntity.notFound().build());
+	}
 	
 	
 	@GetMapping("/all")
-	public ResponseEntity<List<LivroCaixa>> GetAll() {
+	private ResponseEntity<List<LivroCaixaModel>> getAll() {
 		return ResponseEntity.ok(livroCaixaRepository.findAll());
 	}
 	
-	@GetMapping("/{id}")
-    private ResponseEntity<LivroCaixa> getById(@PathVariable long id) {
-        return livroCaixaRepository.findById(id)
-                .map(resp -> ResponseEntity.ok(resp))
-                .orElse(ResponseEntity.notFound().build());
-    }
-	
-    @PostMapping
-    public ResponseEntity<LivroCaixa> postLivroCaixa(@RequestBody LivroCaixa livroCaixa) {
-    	LivroCaixa novoLivro = livroCaixaService.cadastrarLivro(livroCaixa);
-		try {
-			return ResponseEntity.status(HttpStatus.CREATED).body(novoLivro);
-		} catch (Exception e) {
-			return ResponseEntity.badRequest().build();
-		}
- 
-	}
-    
-    @PutMapping
-    public ResponseEntity<LivroCaixa> putLivroCaixa(@RequestBody LivroCaixa livroCaixa) {
-	        Optional<LivroCaixa> atualizarLivro = livroCaixaService.atualizarLivro(livroCaixa);
-	        try {
-	            return ResponseEntity.ok(atualizarLivro.get());
-	        } catch (Exception e) {
-	            return ResponseEntity.badRequest().build();
-	        }
-	    
-    }
-    
-    @DeleteMapping("/{id}")
-    public void getId(@PathVariable long id) {
-        livroCaixaRepository.deleteById(id);
-    }
+	 @PostMapping("/cadastrar")
+	    public ResponseEntity<LivroCaixaModel> postLivro (@RequestBody LivroCaixaModel livroCaixaModel) {
+	        return ResponseEntity.status(HttpStatus.CREATED).body(livroCaixaRepository.save(livroCaixaModel));
+	    }
+	 
+	 @PutMapping("/alterar")
+	    public ResponseEntity<LivroCaixaModel> putLivro (@RequestBody LivroCaixaModel livroCaixaModel) {
+	        return ResponseEntity.status(HttpStatus.OK).body(livroCaixaRepository.save(livroCaixaModel));
+	    }
+	 
+	 @DeleteMapping("/{id}")
+	 public void getId(@PathVariable long id) {
+		 livroCaixaRepository.deleteById(id);
+	 }
 
 }

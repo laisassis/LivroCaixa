@@ -7,18 +7,15 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-
 @Entity
 @Table(name = "tb_livroCaixa")
-public class LivroCaixa {
+public class LivroCaixaModel {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY )
@@ -31,13 +28,12 @@ public class LivroCaixa {
 	@Size(max = 50,  message = "A descrição deve conter no máximo 50 caracteres")
 	private String descricao;
 	
-	@NotNull
+	@NotNull(message = "Digite C para Crédito ou D para Débito")
+	@Size(min = 1, max = 1,  message = "Digite C para Crédito ou D para Débito")
 	private String tipo; 
 	
 	@NotNull
 	private BigDecimal valor;
-	
-	
 
 	public long getId() {
 		return id;
@@ -80,19 +76,5 @@ public class LivroCaixa {
 	}
 	
 	
-	//Conexão com Clientes
-	@ManyToOne
-	@JsonIgnoreProperties("livroCaixa")
-	private ClienteModel cliente;
-
-
-
-	public ClienteModel getCliente() {
-		return cliente;
-	}
-
-	public void setCliente(ClienteModel cliente) {
-		this.cliente = cliente;
-	}
 
 }
