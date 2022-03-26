@@ -1,11 +1,14 @@
 package com.accenture.livroCaixa.model;
 
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -15,6 +18,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
 @Table(name = "tb_clientes")
@@ -52,6 +56,37 @@ public class ClienteModel {
 	
 	@Email(message = "Deve ser um email")
 	private String email;
+	
+	
+	/*Método contrutor
+	
+	public ClienteModel(long id, Date dataCadastro, String nome, long cpfCnpj, String logadouro, String cidade, String uf,
+			String cep, long telefone, String email ) {
+		this.id = id;
+		this.dataCadastro = dataCadastro;
+		this.nome = nome;
+		this.cpfCnpj = cpfCnpj;
+		this.logadouro = logadouro;
+		this.cidade = cidade;
+		this.uf = uf;
+		this.cep = cep;
+		this.telefone = telefone;
+		this.email = email;
+		
+	}*/
+	
+	@OneToMany(mappedBy = "clienteModel", cascade = CascadeType.ALL)
+	@JsonIgnoreProperties("clienteModel")
+	private List<LivroCaixaModel> livroCaixaModel;
+
+
+	public List<LivroCaixaModel> getLivroCaixaModel() {
+		return livroCaixaModel;
+	}
+
+	public void setLivroCaixaModel(List<LivroCaixaModel> livroCaixaModel) {
+		this.livroCaixaModel = livroCaixaModel;
+	}
 
 	public long getId() {
 		return id;
@@ -133,8 +168,6 @@ public class ClienteModel {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	
-	
+
 
 }

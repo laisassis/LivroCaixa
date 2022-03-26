@@ -25,11 +25,8 @@ public class ClienteService {
 	}
 	
 	public Optional<ClienteModel> atualizarCliente(ClienteModel cliente) {
-
 		if (clienteRepository.findById(cliente.getId()).isPresent()) {
-			
 			return Optional.of(clienteRepository.save(cliente));
-
 		} else {
 			throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Usuário não encontrado!", null);
 		}
